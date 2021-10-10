@@ -1,0 +1,6 @@
+services:
+    speedtest:
+      build : .
+      ports:
+      - 9112:9798
+
