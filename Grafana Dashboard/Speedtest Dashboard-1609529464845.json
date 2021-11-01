@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.2.1"
+      "version": "7.0.3"
     },
     {
       "type": "panel",
@@ -27,6 +27,12 @@
       "id": "prometheus",
       "name": "Prometheus",
       "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
     }
   ],
   "annotations": {
@@ -43,12 +49,48 @@
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "gnetId": 12473,
   "graphTooltip": 0,
   "id": null,
   "links": [],
   "panels": [
     {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                300000000
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "1h",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "message": "Download Speed alert",
+        "name": "SpeedTest - Downstream alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -63,32 +105,32 @@
       "fill": 1,
       "fillGradient": 10,
       "gridPos": {
-        "h": 9,
-        "w": 8,
+        "h": 8,
+        "w": 12,
         "x": 0,
         "y": 0
       },
       "hiddenSeries": false,
-      "id": 4,
+      "hideTimeOverride": false,
+      "id": 6,
+      "interval": "",
       "legend": {
         "alignAsTable": true,
         "avg": true,
-        "current": false,
+        "current": true,
         "max": true,
         "min": true,
-        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
       },
       "lines": true,
       "linewidth": 1,
-      "nullPointMode": "null",
+      "nullPointMode": "connected",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -98,23 +140,26 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "speedtest_ping_latency_milliseconds",
+          "expr": "speedtest_download_bytes*8",
           "interval": "",
-          "legendFormat": "Ping (ms)",
+          "intervalFactor": 1,
+          "legendFormat": "Download Speed",
           "refId": "A"
-        },
-        {
-          "expr": "speedtest_jitter_latency_milliseconds",
-          "interval": "",
-          "legendFormat": "Jitter (ms)",
-          "refId": "B"
         }
       ],
-      "thresholds": [],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 300000000
+        }
+      ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Ping and Jitter (ms)",
+      "title": "Downstream",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -130,16 +175,158 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:291",
-          "format": "ms",
-          "label": "Time",
+          "$$hashKey": "object:752",
+          "decimals": null,
+          "format": "bps",
+          "label": "Speed",
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "$$hashKey": "object:753",
+          "format": "short",
+          "label": "",
           "logBase": 1,
           "max": null,
           "min": null,
           "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                4000000
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "1h",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "message": "Speedtest upload alarm",
+        "name": "Speedtest Upstream alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 10,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "hiddenSeries": false,
+      "id": 8,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "speedtest_upload_bytes*8",
+          "legendFormat": "Upload Speed",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 4000000
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Upstream",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:880",
+          "decimals": null,
+          "format": "bps",
+          "label": "Speed",
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
         },
         {
-          "$$hashKey": "object:292",
+          "$$hashKey": "object:881",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -166,20 +353,20 @@
         },
         "overrides": []
       },
-      "fill": 1,
+      "fill": 5,
       "fillGradient": 10,
       "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 8,
-        "y": 0
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
       },
       "hiddenSeries": false,
       "id": 2,
       "legend": {
         "alignAsTable": true,
         "avg": true,
-        "current": false,
+        "current": true,
         "max": true,
         "min": true,
         "show": true,
@@ -187,13 +374,12 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
+      "linewidth": 2,
+      "nullPointMode": "connected",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -203,9 +389,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "speedtest_download_bits_per_second*10^-6",
-          "interval": "",
-          "legendFormat": "Download Speed (Mbits/s)",
+          "expr": "speedtest_jittter_seconds",
+          "format": "time_series",
+          "instant": false,
+          "intervalFactor": 1,
+          "legendFormat": "Jitter",
           "refId": "A"
         }
       ],
@@ -213,7 +401,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Download Speed (Mbits/s)",
+      "title": "Jitter",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -229,19 +417,16 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:291",
-          "format": "Mbits",
-          "label": "Download Speed",
+          "format": "ms",
+          "label": "",
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
-          "$$hashKey": "object:292",
-          "decimals": null,
-          "format": "dateTimeAsLocal",
-          "label": "",
+          "format": "short",
+          "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
@@ -256,44 +441,49 @@
     {
       "aliasColors": {},
       "bars": false,
+      "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
+      "decimals": null,
       "fieldConfig": {
         "defaults": {
           "custom": {}
         },
         "overrides": []
       },
-      "fill": 1,
+      "fill": 5,
       "fillGradient": 10,
       "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 16,
-        "y": 0
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
       },
       "hiddenSeries": false,
-      "id": 3,
+      "id": 4,
       "legend": {
         "alignAsTable": true,
         "avg": true,
-        "current": false,
+        "current": true,
+        "hideEmpty": false,
         "max": true,
         "min": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
       },
       "lines": true,
       "linewidth": 1,
-      "nullPointMode": "null",
+      "links": [],
+      "nullPointMode": "connected",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
-      "pointradius": 2,
+      "pluginVersion": "6.6.2",
+      "pointradius": 0.5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
@@ -302,9 +492,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "speedtest_upload_bits_per_second*10^-6",
-          "interval": "",
-          "legendFormat": "Upload Speed (Mbits/s)",
+          "expr": "speedtest_latency_seconds",
+          "legendFormat": "Latency",
           "refId": "A"
         }
       ],
@@ -312,7 +501,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Upload Speed (Mbits/s)",
+      "title": "Latency",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -328,34 +517,273 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:291",
           "decimals": null,
-          "format": "Mbits",
-          "label": "Upload Speed",
+          "format": "ms",
+          "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
-          "$$hashKey": "object:292",
-          "decimals": null,
           "format": "short",
           "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "datasource": "${DS_PROMETHEUS}",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Uploaded Bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Downloaded Bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #D"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "gradient-gauge"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SpeedTest Server ID"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Uploaded Bytes"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 171
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Downloaded Bytes"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 184
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Share URL"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 693
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SpeedTest Server Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 250
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "hideTimeOverride": false,
+      "id": 10,
+      "interval": "5m",
+      "maxDataPoints": 100,
+      "options": {
+        "frameIndex": 1,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Time"
+          }
+        ]
+      },
+      "pluginVersion": "7.0.3",
+      "targets": [
+        {
+          "expr": "speedtest_servername_info",
+          "format": "table",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "D"
+        },
+        {
+          "expr": "speedtest_uploadedbytes_bytes",
+          "format": "table",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Uploaded Bytes",
+          "refId": "A"
+        },
+        {
+          "expr": "speedtest_downloadedbytes_bytes",
+          "format": "table",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Downloaded Bytes",
+          "refId": "B"
+        },
+        {
+          "expr": "speedtest_shareurl_info",
+          "format": "table",
+          "interval": "",
+          "legendFormat": "Share URL",
+          "refId": "E"
+        },
+        {
+          "expr": "speedtest_serverid_info",
+          "format": "table",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Results",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "Time"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Value #A": false,
+              "Value #C": true,
+              "Value #D": true,
+              "Value #E": true,
+              "__name__": true,
+              "instance": true,
+              "job": true,
+              "servername": false,
+              "speedtest_servername_info{instance=\"192.168.1.9:9469\", job=\"Speedtest\", servername=\"NOS - Porto\"}": false
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value #A": 7,
+              "Value #B": 8,
+              "Value #C": 9,
+              "Value #D": 3,
+              "Value #E": 11,
+              "__name__": 4,
+              "instance": 5,
+              "job": 6,
+              "serverid": 1,
+              "servername": 2,
+              "shareurl": 10
+            },
+            "renameByName": {
+              "Value #A": "Uploaded Bytes",
+              "Value #B": "",
+              "Value #C": "",
+              "Value #D": "",
+              "instance": "Instance",
+              "job": "Job",
+              "serverid": "SpeedTest Server ID",
+              "servername": "SpeedTest Server Name",
+              "shareurl": "Share URL"
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
-  "refresh": false,
-  "schemaVersion": 26,
+  "schemaVersion": 25,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -365,9 +793,22 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "refresh_intervals": [
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
   "timezone": "",
-  "title": "Speedtest Dashboard",
-  "uid": "-fs18ztMz",
-  "version": 4
+  "title": "Speedtest Exporter v2",
+  "uid": "MBmaYd9Wk",
+  "version": 11,
+  "description": "Dashboard for my Speedtest exporter.\r\n\r\nV2 has a results table with:\r\n\r\n- Time\r\n- Speedtest Server ID\r\n- Speedtest Server Name\r\n- Share URL\r\n- Uploaded and downloaded bytes"
 }
