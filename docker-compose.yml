@@ -1,6 +1,5 @@
 services:
     speedtest:
-      build : .
+      image:  ghcr.io/danopstech/speedtest_exporter:latest
       ports:
-      - 9112:9798
-
+      - 9516:9090
